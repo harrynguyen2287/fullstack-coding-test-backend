@@ -1,6 +1,7 @@
 using Backend.Entities;
 using Backend.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
 {
@@ -15,8 +16,37 @@ namespace Backend.Controllers
             this.context = context;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<List<Blog>>> Get()
+        {
+            try
+            {
+                var blogs = await context.Blogs.ToListAsync();
+                return Ok(blogs);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<Blog>> Get(Guid id)
+        {
+            try
+            {
+                var blog = await context.Blogs.FindAsync(id);
+                return Ok(blog);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
         [HttpPost]
-        public async Task<ActionResult<bool>> Save(Blog blog)
+        public async Task<ActionResult<bool>> Save([FromBody] Blog blog)
         {
             try
             {

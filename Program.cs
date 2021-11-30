@@ -3,9 +3,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Replace with your connection string.
-var connectionString = "server=localhost;port=3307;user=root;password=1234;database=FullstackTest";
-
 // Replace with your server version and type.
 // Use 'MariaDbServerVersion' for MariaDB.
 // Alternatively, use 'ServerVersion.AutoDetect(connectionString)'.
@@ -15,7 +12,7 @@ var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
 // Replace 'YourDbContext' with the name of your own DbContext derived class.
 builder.Services.AddDbContext<ApplicationDbContext>(
     dbContextOptions => dbContextOptions
-        .UseMySql(connectionString, serverVersion)
+        .UseMySql(builder.Configuration.GetConnectionString("ApplicationDbContext"), serverVersion)
         // The following three options help with debugging, but should
         // be changed or removed for production.
         .LogTo(Console.WriteLine, LogLevel.Information)
